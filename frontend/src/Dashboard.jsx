@@ -53,7 +53,7 @@ const Dashboard = () => {
     try {
       // Step 1: Get AI Prediction from Python Flask
       const response = await axios.post(
-        "http://127.0.0.1:5000/predict",
+        "https://student-early-dropout-prediction-ek.vercel.app/",
         aiPayload,
       );
 
