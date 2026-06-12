@@ -50,32 +50,41 @@ const Dashboard = () => {
       Debtor: formData.feeStatus === "Unpaid" ? 1 : 0,
     };
 
+    // Step 1: Talk to Python AI
+    let resultText = "";
     try {
-      // Step 1: Get AI Prediction from Python Flask
       const response = await axios.post(
         "https://student-early-dropout-prediction-ek.vercel.app/predict",
         aiPayload,
       );
-
-      const resultText = response.data.prediction;
+      resultText = response.data.prediction;
       setPrediction(resultText);
       setExplanationData(response.data.explanation);
+    } catch (error) {
+      console.error("AI Connection failed:", error.message);
+      setPrediction("System Unavailable");
+      setLoading(false);
+      return; // Stop the function here if the AI crashes
+    }
 
-      // Step 2: Save everything to Express/MongoDB Atlas
+    // Step 2: Save to Express/MongoDB
+    try {
       const dbPayload = {
         ...formData,
         aiPrediction: resultText,
       };
-
       await axios.post(
         "https://student-early-dropout-prediction.vercel.app/api/records",
         dbPayload,
       );
       console.log("Record permanently saved to MongoDB!");
     } catch (error) {
-      console.error("Connection failed:", error.message);
-      setPrediction("System Unavailable");
+      console.error("Database Save failed:", error.message);
+      alert(
+        "Prediction successful, but we could not save it to the Dashboard History.",
+      );
     }
+
     setLoading(false);
   };
 
