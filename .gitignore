@@ -1,0 +1,12 @@
+# Node & React
+node_modules/
+build/
+dist/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Environment Variables (NEVER UPLOAD PASSWORDS!)
+.env
