@@ -67,7 +67,10 @@ const Dashboard = () => {
         aiPrediction: resultText,
       };
 
-      await axios.post("http://localhost:4000/api/records", dbPayload);
+      await axios.post(
+        "https://student-early-dropout-prediction.vercel.app/api/records",
+        dbPayload,
+      );
       console.log("Record permanently saved to MongoDB!");
     } catch (error) {
       console.error("Connection failed:", error.message);
