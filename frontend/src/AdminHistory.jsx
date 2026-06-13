@@ -30,8 +30,8 @@ const AdminHistory = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto w-full">
         <div className="mb-8">
           <h2 className="text-3xl font-extrabold text-slate-900">
             Historical Risk Assessments
@@ -42,9 +42,11 @@ const AdminHistory = () => {
           </p>
         </div>
 
-        <div className="bg-white shadow-xl rounded-lg overflow-hidden border border-slate-200">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200">
+        {/* The wrapper below creates the strict scrolling boundary */}
+        <div className="bg-white shadow-xl rounded-lg border border-slate-200 w-full">
+          <div className="w-full overflow-x-auto">
+            {/* The min-w-[800px] forces the table to stay wide enough to read, triggering the scrollbar on mobile */}
+            <table className="w-full min-w-200 divide-y divide-slate-200">
               <thead className="bg-slate-800">
                 <tr>
                   <th className="px-6 py-4 text-left text-xs font-medium text-slate-200 uppercase tracking-wider">

@@ -278,32 +278,47 @@ const Dashboard = () => {
             </div>
 
             {/* The Explanation Chart */}
-            <div className="bg-white p-8 rounded-b-2xl border-2 border-t-0 shadow-lg border-slate-200">
-              <h4 className="text-center font-semibold text-slate-700 mb-6 uppercase tracking-wider text-sm">
+            <div className="bg-white p-4 sm:p-8 rounded-b-2xl border-2 border-t-0 shadow-lg border-slate-200">
+              <h4 className="text-center font-semibold text-slate-700 mb-6 uppercase tracking-wider text-sm sm:text-base">
                 Model Decision Breakdown
               </h4>
-              <div className="h-64 w-full">
+
+              {/* UPGRADE 1: Changed h-64 to h-80 on mobile, and h-96 on larger screens for massive breathing room */}
+              <div className="h-80 sm:h-96 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={explanationData}
                     layout="vertical"
-                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                    // Slightly reduced left margin on mobile so labels don't eat the whole screen
+                    margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
                   >
                     <XAxis type="number" hide />
                     <YAxis
                       dataKey="factor"
                       type="category"
-                      width={100}
-                      tick={{ fontSize: 12, fill: "#475569" }}
+                      width={90} // Slightly narrower for mobile screens
+                      tick={{ fontSize: 11, fill: "#475569", fontWeight: 500 }}
+                      axisLine={false} // Hides the ugly default axis line for a cleaner look
+                      tickLine={false} // Hides the little tick marks
                     />
                     <Tooltip
                       cursor={{ fill: "#f1f5f9" }}
                       formatter={(value) => [value, "Impact Score"]}
+                      contentStyle={{
+                        borderRadius: "8px",
+                        border: "none",
+                        boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                      }}
                     />
-                    <ReferenceLine x={0} stroke="#94a3b8" />
-                    <Bar dataKey="impact" radius={[0, 4, 4, 0]}>
+                    <ReferenceLine
+                      x={0}
+                      stroke="#cbd5e1"
+                      strokeDasharray="3 3"
+                    />
+
+                    {/* UPGRADE 2: Added maxBarSize to force the bars to be thick and premium-looking */}
+                    <Bar dataKey="impact" radius={[0, 6, 6, 0]} maxBarSize={32}>
                       {explanationData.map((entry, index) => (
-                        // Green if pushing towards graduate, Red if pushing towards dropout
                         <Cell
                           key={`cell-${index}`}
                           fill={entry.impact > 0 ? "#10b981" : "#ef4444"}
@@ -313,10 +328,14 @@ const Dashboard = () => {
                   </BarChart>
                 </ResponsiveContainer>
               </div>
-              <p className="text-xs text-center text-slate-400 mt-4">
-                * Bars stretching to the right (
+
+              <p className="text-xs text-center text-slate-500 mt-6 leading-relaxed">
+                * Bars stretching right (
                 <span className="text-emerald-500 font-bold">Green</span>)
-                reduce dropout risk. Bars stretching left (
+                reduce dropout risk.
+                <br className="sm:hidden" />{" "}
+                {/* Forces a line break only on mobile for readability */}
+                Bars stretching left (
                 <span className="text-red-500 font-bold">Red</span>) increase
                 dropout risk.
               </p>
