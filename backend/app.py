@@ -27,7 +27,7 @@ def predict_dropout():
         df = pd.DataFrame([filtered_data])
         
         prediction = model.predict(df)
-        result = "Low Risk: Graduate" if prediction[0] == 0 else "High Risk: Dropout"
+        result = "High Risk: Dropout" if prediction[0] == 0 else "Low Risk: Graduate"
         
         # ---------------------------------------------------------
         # THE CALIBRATED XAI MATH (This is the section that was updated)
